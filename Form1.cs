@@ -44,27 +44,27 @@ namespace Tactical_Nexus_Note_Manager
 
         public void ChangeMemoFile (object? sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex == 0)
-                return;
-
-            MemoFile sourceFile = MemoFiles[cmb_LevelNames.Text][e.RowIndex];
-            string parentFileName = $"memo-{cmb_LevelNames.Text}.dat";
-
-            string originalLevel = cmb_LevelNames.Text;
-
-            try
+            if (e.RowIndex != 0)
             {
-                string sourceFileName = Path.Combine(sourceFile.FullFilename);
-                string destFileName = Path.Combine(sourceFile.FileDirectory.FullName, parentFileName);
+                MemoFile sourceFile = MemoFiles[cmb_LevelNames.Text][e.RowIndex];
+                string parentFileName = $"memo-{cmb_LevelNames.Text}.dat";
 
-                File.Copy(sourceFileName, destFileName, true);
+                string originalLevel = cmb_LevelNames.Text;
 
-                UpdateDirectory(sender, e);
-                cmb_LevelNames.Text = originalLevel;
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show("The level's memo file is in use.");
+                try
+                {
+                    string sourceFileName = Path.Combine(sourceFile.FullFilename);
+                    string destFileName = Path.Combine(sourceFile.FileDirectory.FullName, parentFileName);
+
+                    File.Copy(sourceFileName, destFileName, true);
+
+                    UpdateDirectory(sender, e);
+                    cmb_LevelNames.Text = originalLevel;
+                }
+                catch (IOException ex)
+                {
+                    MessageBox.Show("The level's memo file is in use.");
+                }
             }
         }
 
@@ -123,11 +123,11 @@ namespace Tactical_Nexus_Note_Manager
     {
         string _fileHash = null;
 
-        public DirectoryInfo FileDirectory { get; set; }
+        public DirectoryInfo FileDirectory { get; internal set; }
 
-        public string FullFilename { get; set; }
+        public string FullFilename { get; internal set; }
 
-        public string Filename { get; set; }
+        public string Filename { get; internal set; }
 
         public string Filehash
         {
